@@ -10,7 +10,10 @@ const { RemoveMultipleImagesCloudinary } = require("../utils/Cloudinary");
 const getUsers = asyncHandler(async (req, res) => {
   const countDocuments = await User.countDocuments();
 
-  const features = new ApiFeatures(User.find({}), req.query);
+  const features = new ApiFeatures(
+    User.find({}).sort({ createdAt: 1 }),
+    req.query
+  );
 
   features
     .Filter()
