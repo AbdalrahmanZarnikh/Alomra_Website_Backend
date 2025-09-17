@@ -11,7 +11,7 @@ const getUsers = asyncHandler(async (req, res) => {
   const countDocuments = await User.countDocuments();
 
   const features = new ApiFeatures(
-    User.find({}).sort({ createdAt: 1 }),
+    User.find({}),
     req.query
   );
 
