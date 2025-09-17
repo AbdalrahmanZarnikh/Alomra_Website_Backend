@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -30,26 +29,27 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    details:{
+    details: {
+      type: String,
+    },
+    room: {
       type: String,
     },
     // filePDF: {
     //   type: String,
     // },
-    omra:{
+    omra: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Omra"
-    }
+      ref: "Omra",
+    },
   },
   { timestamps: true }
 );
 
-
 userSchema.pre(/^find/, function (next) {
-   this.populate({ path: "omra" , select: "name"})
-   next();
-  }  )
-
+  this.populate({ path: "omra", select: "name" });
+  next();
+});
 
 const UserModel = mongoose.model("User2", userSchema);
 
