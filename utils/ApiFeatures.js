@@ -27,23 +27,16 @@ class ApiFeatures {
   Search(modelName) {
     if (this.queryString.keyword) {
       const query = {};
-      if (modelName == "ProductModel") {
+      if (modelName == "UserModel") {
         query.$or = [
-          { title: { $regex: this.queryString.keyword, $options: "i" } },
-          { description: { $regex: this.queryString.keyword, $options: "i" } },
-        ];
-      }
-      else if(modelName=="orderModel"){
-            query.$or = [
-          { paymentMethod: { $regex: this.queryString.keyword, $options: "i" } },
-          { hawalaCompany: { $regex: this.queryString.keyword, $options: "i" } },  
-          { user: { $regex: this.queryString.keyword, $options: "i" } },  
-
+          { name: { $regex: this.queryString.keyword, $options: "i" } },
+          { room: { $regex: this.queryString.keyword, $options: "i" } },
+          { phone: { $regex: this.queryString.keyword, $options: "i" } },
         ];
       }
       else{
         query.$or=[
-            {name:{$regex:this.queryString.keyword,$options:"i"}}
+            {name:{$regex:this.queryString.keyword,$options:"i"}},
         ]
       }
       this.mongooseQuery=this.mongooseQuery.find(query);
