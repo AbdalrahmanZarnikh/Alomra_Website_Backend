@@ -66,10 +66,15 @@ exports.UpdateOmra = asyncHandler(async (req, res, next) => {
 exports.DeleteOmra = asyncHandler(async (req, res) => {
   const { id } = req.params;
  
-
-
-
   const document = await OmraModel.findByIdAndDelete(id);
+
+
+
+  // delete all documents in UserModel that reference this document
+  await OmraModel.deleteMany({ omra: id });
+
+
+ 
 
   if (!document) {
     return res
