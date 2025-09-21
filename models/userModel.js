@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema(
     room: {
       type: String,
     },
-    // filePDF: {
-    //   type: String,
-    // },
+    safar: {
+      type: String,
+    },
     omra: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Omra",
