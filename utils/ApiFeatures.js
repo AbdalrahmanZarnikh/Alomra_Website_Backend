@@ -31,7 +31,7 @@ class ApiFeatures {
         query.$or = [
           { name: { $regex: this.queryString.keyword, $options: "i" } },
           { room: { $regex: this.queryString.keyword, $options: "i" } },
-          { phone: { $regex: this.queryString.keyword, $options: "i" } },
+          { safar: { $regex: this.queryString.keyword, $options: "i" } },
         ];
       }
       else{
