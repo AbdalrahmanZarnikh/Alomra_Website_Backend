@@ -69,3 +69,20 @@ exports.RemoveFileCloudinary = async (Model, id) => {
     console.log("Delete error:", error);
   }
 };
+
+exports.RemoveMultipleFilesCloudinary = async (Model, id) => {
+  try {
+    const doc = await Model.findById(id);
+    if (Array.isArray(doc.filePdf)) {
+      for (const file of doc.filePdf) {
+        if (file.public_id) {
+          await cloudinary.uploader.destroy(file.public_id, {
+            resource_type: "raw", // ضروري لحذف ملفات غير الصور
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.log("Error removing multiple files:", error);
+  }
+};
