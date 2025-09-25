@@ -46,12 +46,25 @@ exports.RemoveMultipleImagesCloudinary = async (Model, id) => {
 exports.UploadFileCloudinary = async (path) => {
   try {
     const result = await cloudinary.uploader.upload(path, {
-      resource_type: "raw", // ضروري لرفع ملفات PDF أو ZIP أو DOCX
+      resource_type: "raw",
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
     });
 
-    return result;
+    // توليد رابط تحميل مباشر باستخدام fl_attachment
+    const downloadUrl = result.secure_url.replace(
+      "/upload/",
+      "/upload/fl_attachment/"
+    );
+
+    return {
+      ...result,
+      downloadUrl,
+    };
   } catch (error) {
     console.log("Cloudinary upload error:", error);
+    return null;
   }
 };
 
