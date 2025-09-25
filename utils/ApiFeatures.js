@@ -33,82 +33,70 @@ class ApiFeatures {
           { room: { $regex: this.queryString.keyword, $options: "i" } },
           { safar: { $regex: this.queryString.keyword, $options: "i" } },
         ];
+      } else {
+        query.$or = [
+          { name: { $regex: this.queryString.keyword, $options: "i" } },
+        ];
       }
-      else{
-        query.$or=[
-            {name:{$regex:this.queryString.keyword,$options:"i"}},
-        ]
-      }
-      this.mongooseQuery=this.mongooseQuery.find(query);
+      this.mongooseQuery = this.mongooseQuery.find(query);
     }
     return this;
   }
 
-
-  Sort(){
-    if(this.queryString.sort){
-        let sortString=this.queryString.sort.split(",").join(" ");
-        this.mongooseQuery=this.mongooseQuery.sort(sortString);
-    }
-    else{
-        this.mongooseQuery=this.mongooseQuery.sort("-createdAt");
+  Sort() {
+    if (this.queryString.sort) {
+      let sortString = this.queryString.sort.split(",").join(" ");
+      this.mongooseQuery = this.mongooseQuery.sort(sortString);
+    } else {
+      this.mongooseQuery = this.mongooseQuery.sort("-createdAt");
     }
     return this;
   }
 
-  LimitFields(){
-    if(this.queryString.fields){
-        let fieldsString=this.queryString.fields.split(",").join(" ");
+  LimitFields() {
+    if (this.queryString.fields) {
+      let fieldsString = this.queryString.fields.split(",").join(" ");
 
-        this.mongooseQuery=this.mongooseQuery.select(fieldsString);
-    }
-    else{
-        this.mongooseQuery=this.mongooseQuery.select("-__v");
+      this.mongooseQuery = this.mongooseQuery.select(fieldsString);
+    } else {
+      this.mongooseQuery = this.mongooseQuery.select("-__v");
     }
     return this;
   }
 
-  Paginate(countDocuments){
-    const page=this.queryString.page*1 ||1;
-    const limit =this.queryString.limit*1 ||50;
+  Paginate(countDocuments) {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 2000;
 
+    const skip = (page - 1) * limit;
 
-    const skip =(page -1 )*limit;
+    const endIndexInPage = page * limit;
 
-    const endIndexInPage=page * limit;
+    let pagination = {};
 
-    let pagination={};
+    pagination.currentPage = page;
 
-    pagination.currentPage=page;
+    pagination.limit = limit;
 
-    pagination.limit=limit;
-
-  
-    pagination.numberOfPages=Math.ceil(countDocuments/limit)
+    pagination.numberOfPages = Math.ceil(countDocuments / limit);
 
     // nextPage
-    if(endIndexInPage < countDocuments){
-        pagination.next=page+1;
+    if (endIndexInPage < countDocuments) {
+      pagination.next = page + 1;
     }
 
     // prevPage
 
-    if(skip > 0){
-        pagination.prev=page-1;
+    if (skip > 0) {
+      pagination.prev = page - 1;
     }
 
-    this.mongooseQuery=this.mongooseQuery.skip(skip).limit(limit);
+    this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limit);
 
-    this.pagination=pagination;
+    this.pagination = pagination;
 
     return this;
-
   }
-
-
-
-
 }
 
-
-module.exports=ApiFeatures
+module.exports = ApiFeatures;
