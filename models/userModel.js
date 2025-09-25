@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
     safar: { type: String },
 
     omra: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: "Omra",
     },
   },
