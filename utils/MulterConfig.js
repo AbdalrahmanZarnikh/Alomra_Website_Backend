@@ -4,17 +4,23 @@ const ApiError = require("./ApiError");
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    const fileName = `image-${Date.now()}.${ext}`;
-
+    const fileName = `${file.fieldname}-${Date.now()}.${ext}`;
     cb(null, fileName);
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "application/pdf",
+  ];
+
+  if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new ApiError("only image allowed", 400), false);
+    cb(new ApiError("Only images and PDF files are allowed", 400), false);
   }
 };
 

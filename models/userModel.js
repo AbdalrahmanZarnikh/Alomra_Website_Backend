@@ -23,25 +23,28 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    // 🖼️ الصور
     images: [
       {
-        public_id: {
-          type: String,
-        },
-        url: {
-          type: String,
-        },
+        public_id: { type: String },
+        url: { type: String },
       },
     ],
-    details: {
-      type: String,
-    },
-    room: {
-      type: String,
-    },
-    safar: {
-      type: String,
-    },
+
+    // 📄 ملفات PDF
+    filePdf: [
+      {
+        public_id: { type: String },
+        url: { type: String },
+        format: { type: String }, // مثل "pdf"
+      },
+    ],
+
+    details: { type: String },
+    room: { type: String },
+    safar: { type: String },
+
     omra: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Omra",
@@ -50,6 +53,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// ربط تلقائي مع بيانات العمرة
 userSchema.pre(/^find/, function (next) {
   this.populate({ path: "omra", select: "name" });
   next();

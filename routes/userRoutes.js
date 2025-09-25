@@ -2,20 +2,17 @@ const express = require("express");
 
 const router = express.Router();
 const {
-   createUser,
-   updateUser,
-   deleteUser,
-   getUser,
-   getUsers
+  createUser,
+  updateUser,
+  deleteUser,
+  getUser,
+  getUsers,
 } = require("../controllers/userController");
 
-
-
-
-const {upload} =require("../utils/MulterConfig")
-
+const { upload } = require("../utils/MulterConfig");
 
 const UploadMultipleImages = require("../middlewares/UploadMultipleImagesMiddleware");
+const UploadFiles=require("../middlewares/UploadFilesMiddleware")
 
 router
   .route("/")
@@ -26,8 +23,13 @@ router
         name: "images",
         maxCount: 10,
       },
+      {
+        name: "filePdf",
+        maxCount: 5,
+      },
     ]),
     UploadMultipleImages,
+    UploadFiles,
     createUser
   );
 
@@ -39,8 +41,13 @@ router
         name: "images",
         maxCount: 10,
       },
+      {
+        name: "filePdf",
+        maxCount: 5,
+      },
     ]),
     UploadMultipleImages,
+    UploadFiles,
     updateUser
   )
   .get(getUser)
