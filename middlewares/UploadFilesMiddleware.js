@@ -4,7 +4,6 @@ const UploadFiles = async (req, res, next) => {
   
   if (req.files?.filePdf) {
     try {
-      console.log("helllo")
       const uploadedFiles = [];
 
       for (const file of req.files.filePdf) {
@@ -14,7 +13,11 @@ const UploadFiles = async (req, res, next) => {
           public_id: result.public_id,
           format: result.format,
         });
+
+
       }
+
+      
 
       req.uploadedFiles = uploadedFiles;
     } catch (error) {

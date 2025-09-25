@@ -29,7 +29,6 @@ router
       },
     ]),
     UploadMultipleImages,
-    UploadFiles,
     createUser
   );
 
@@ -47,7 +46,6 @@ router
       },
     ]),
     UploadMultipleImages,
-    UploadFiles,
     updateUser
   )
   .get(getUser)

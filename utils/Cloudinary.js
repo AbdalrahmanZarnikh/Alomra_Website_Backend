@@ -42,29 +42,22 @@ exports.RemoveMultipleImagesCloudinary = async (Model, id) => {
     console.log(error);
   }
 };
-
 exports.UploadFileCloudinary = async (path) => {
   try {
     const result = await cloudinary.uploader.upload(path, {
-      resource_type: "raw",
-      use_filename: true,
+      resource_type: "raw", // يجبره يكون raw
+      public_id: `pdfs/${Date.now()}`, // اسم جديد يضمن ما يتعارض مع القديم
+      use_filename: false,
       unique_filename: false,
-      overwrite: true,
+      overwrite: false,
+      flags: "attachment",
     });
 
-    // توليد رابط تحميل مباشر باستخدام fl_attachment
-    const downloadUrl = result.secure_url.replace(
-      "/upload/",
-      "/upload/fl_attachment/"
-    );
 
-    return {
-      ...result,
-      downloadUrl,
-    };
+    return result
   } catch (error) {
-    console.log("Cloudinary upload error:", error);
-    return null;
+    console.error("Cloudinary upload error:", error);
+    return res.status(500).json({ error: "فشل الرفع" });
   }
 };
 
