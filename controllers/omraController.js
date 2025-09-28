@@ -5,6 +5,8 @@ const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const ApiFeatures = require("../utils/ApiFeatures");
 
+const {RemoveAllUsersImagesCloudinary} =require("../utils/Cloudinary")
+
 
 
 exports.GetAllOmras = asyncHandler(async (req, res, next) => {
@@ -71,8 +73,12 @@ exports.DeleteOmra = asyncHandler(async (req, res) => {
 
 
 
+  await RemoveAllUsersImagesCloudinary(UserModel);
+
   // delete all documents in UserModel that reference this document
   await UserModel.deleteMany({ omra: id });
+
+
 
 
  

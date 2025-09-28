@@ -53,8 +53,7 @@ exports.UploadFileCloudinary = async (path) => {
       flags: "attachment",
     });
 
-
-    return result
+    return result;
   } catch (error) {
     console.error("Cloudinary upload error:", error);
     return res.status(500).json({ error: "فشل الرفع" });
@@ -90,5 +89,31 @@ exports.RemoveMultipleFilesCloudinary = async (Model, id) => {
     }
   } catch (error) {
     console.log("Error removing multiple files:", error);
+  }
+};
+
+exports.RemoveAllUsersImagesCloudinary = async (UserModel) => {
+  try {
+    const users = await UserModel.find({}); // جلب جميع المستخدمين
+
+    for (const user of users) {
+      // حذف صورة واحدة إن وجدت
+      if (user.image?.public_id) {
+        await cloudinary.uploader.destroy(user.image.public_id);
+      }
+
+      // حذف صور متعددة إن وجدت
+      if (Array.isArray(user.images)) {
+        for (const image of user.images) {
+          if (image.public_id) {
+            await cloudinary.uploader.destroy(image.public_id);
+          }
+        }
+      }
+    }
+
+    console.log("تم حذف الصور لجميع المستخدمين بنجاح");
+  } catch (error) {
+    console.error("خطأ أثناء حذف الصور لجميع المستخدمين:", error);
   }
 };
