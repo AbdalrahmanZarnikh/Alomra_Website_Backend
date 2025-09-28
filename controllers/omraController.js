@@ -1,4 +1,5 @@
 const OmraModel = require("../models/omraModel");
+const UserModel=require("../models/userModel")
 
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
@@ -71,7 +72,7 @@ exports.DeleteOmra = asyncHandler(async (req, res) => {
 
 
   // delete all documents in UserModel that reference this document
-  await OmraModel.deleteMany({ omra: id });
+  await UserModel.deleteMany({ omra: id });
 
 
  
