@@ -73,7 +73,7 @@ exports.DeleteOmra = asyncHandler(async (req, res) => {
 
 
 
-  await RemoveAllUsersImagesCloudinary(UserModel);
+  await RemoveAllUsersImagesCloudinary(UserModel,id);
 
   // delete all documents in UserModel that reference this document
   await UserModel.deleteMany({ omra: id });

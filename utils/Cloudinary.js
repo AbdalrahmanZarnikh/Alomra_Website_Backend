@@ -92,9 +92,9 @@ exports.RemoveMultipleFilesCloudinary = async (Model, id) => {
   }
 };
 
-exports.RemoveAllUsersImagesCloudinary = async (UserModel) => {
+exports.RemoveAllUsersImagesCloudinary = async (UserModel,omraId) => {
   try {
-    const users = await UserModel.find({}); // جلب جميع المستخدمين
+    const users = await UserModel.find({omra:omraId}); //  جلب جميع المستخدمين في نفس العمرة
 
     for (const user of users) {
       // حذف صورة واحدة إن وجدت
