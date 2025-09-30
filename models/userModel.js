@@ -45,6 +45,8 @@ const userSchema = new mongoose.Schema(
     room: { type: String },
     safar: { type: String },
 
+    roomType:{type:String},
+
     omra: {
       type: mongoose.Schema.ObjectId,
       ref: "Omra",
