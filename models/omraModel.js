@@ -8,7 +8,17 @@ const omraSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "omra name  required"],
-    }
+    },
+    ثنائية: {
+      type: Number,
+    },
+    ثلاثية: {
+      type: Number,
+    },
+
+    رباعية: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
