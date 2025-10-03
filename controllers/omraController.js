@@ -1,13 +1,11 @@
 const OmraModel = require("../models/omraModel");
-const UserModel=require("../models/userModel")
+const UserModel = require("../models/userModel");
 
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const ApiFeatures = require("../utils/ApiFeatures");
 
-const {RemoveAllUsersImagesCloudinary} =require("../utils/Cloudinary")
-
-
+const { RemoveAllUsersImagesCloudinary } = require("../utils/Cloudinary");
 
 exports.GetAllOmras = asyncHandler(async (req, res, next) => {
   const countDocuments = await OmraModel.countDocuments();
@@ -38,9 +36,7 @@ exports.GetOneOmra = asyncHandler(async (req, res, next) => {
   const omra = await OmraModel.findById(id);
 
   if (!omra) {
-    return res
-      .status(404)
-      .json({ status: "Fail", message: "Omra Not Found" });
+    return res.status(404).json({ status: "Fail", message: "Omra Not Found" });
   }
 
   res.status(200).json({ status: "Success", data: omra });
@@ -59,29 +55,43 @@ exports.UpdateOmra = asyncHandler(async (req, res, next) => {
   });
 
   if (!omraUpdated) {
-    return res
-      .status(404)
-      .json({ status: "Fail", message: "Omra Not Found" });
+    return res.status(404).json({ status: "Fail", message: "Omra Not Found" });
   }
+
+  const users = await UserModel.find({ omra: id });
+
+  for (const user of users) {
+    let newAmount = 0;
+
+    switch (user.roomType) {
+      case "ثنائية":
+        newAmount = omraUpdated.ثنائية;
+        break;
+      case "ثلاثية":
+        newAmount = omraUpdated.ثلاثية;
+        break;
+      case "رباعية":
+        newAmount = omraUpdated.رباعية;
+        break;
+      default:
+        newAmount = 0; 
+    }
+
+    await UserModel.findByIdAndUpdate(user._id, { totalAmount: newAmount });
+  }
+
   res.status(200).json({ status: "Success", data: omraUpdated });
 });
 
 exports.DeleteOmra = asyncHandler(async (req, res) => {
   const { id } = req.params;
- 
+
   const document = await OmraModel.findByIdAndDelete(id);
 
-
-
-  await RemoveAllUsersImagesCloudinary(UserModel,id);
+  await RemoveAllUsersImagesCloudinary(UserModel, id);
 
   // delete all documents in UserModel that reference this document
   await UserModel.deleteMany({ omra: id });
-
-
-
-
- 
 
   if (!document) {
     return res
