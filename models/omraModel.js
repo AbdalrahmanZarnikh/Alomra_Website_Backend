@@ -19,6 +19,9 @@ const omraSchema = new mongoose.Schema(
     رباعية: {
       type: Number,
     },
+    خماسية: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
