@@ -23,8 +23,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    sitNumber:{
-      type:String
+    visa: {
+      type: Boolean,
+      default: false,
+    },
+    sitNumber: {
+      type: String,
     },
     // 🖼️ الصور
     images: [
@@ -47,7 +51,7 @@ const userSchema = new mongoose.Schema(
     room: { type: String },
     safar: { type: String },
 
-    roomType:{type:String},
+    roomType: { type: String },
 
     omra: {
       type: mongoose.Schema.ObjectId,
