@@ -22,6 +22,9 @@ const omraSchema = new mongoose.Schema(
     خماسية: {
       type: Number,
     },
+    خاصة: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
