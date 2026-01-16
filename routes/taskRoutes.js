@@ -2,14 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 const {
- getTask,
- getTasks,
- createTask,
- updateTask,
- deleteTask
+  getTask,
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
 } = require("../controllers/taskController");
-
-
+const { upload } = require("../utils/MulterConfig");
+const UploadMultipleImages = require("../middlewares/UploadMultipleImagesMiddleware");
+const UploadFiles = require("../middlewares/UploadFilesMiddleware");
 
 router
   .route("/")
