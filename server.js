@@ -13,6 +13,7 @@ const ConnectDB=require("./DB/ConnectDB")
 
 const OmraRoutes=require("./routes/omraRoutes");
 const userRoutes=require("./routes/userRoutes");
+const taskRoutes=require("./routes/taskRoutes")
 
 
 
@@ -33,6 +34,7 @@ app.use(express.json());
 // routes
 app.use("/api/omras",OmraRoutes);
 app.use("/api/users",userRoutes);
+app.use("/api/tasks",taskRoutes);
 
 
 // Error MiddleWare

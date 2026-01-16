@@ -1,0 +1,79 @@
+const Task = require("../models/taskModel");
+const asyncHandler = require("express-async-handler");
+const ApiError = require("../utils/ApiError");
+const ApiFeatures = require("../utils/ApiFeatures");
+
+// 📥 Get all tasks
+const getTasks = asyncHandler(async (req, res) => {
+  const countDocuments = await Task.countDocuments();
+
+  const features = new ApiFeatures(Task.find({}), req.query)
+    .Filter()
+    .Search("TaskModel")
+    .Paginate(countDocuments)
+    .LimitFields()
+    .Sort();
+
+  const { mongooseQuery, pagination } = features;
+  const tasks = await mongooseQuery;
+
+  if (!tasks) {
+    return next(new ApiError("tasks not found!", 404));
+  }
+
+  res.status(200).json({ status: "Success", pagination, data: tasks });
+});
+
+// 📥 Get single task
+const getTask = asyncHandler(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  if (!task) {
+    return next(new ApiError("task not found!", 404));
+  }
+  res.status(200).json({ status: "Success", data: task });
+});
+
+// ➕ Create new task
+const createTask = asyncHandler(async (req, res) => {
+  const task = await Task.create(req.body);
+  res.status(201).json({ status: "Success", data: task });
+});
+
+// ✏️ Update task
+const updateTask = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const taskUpdated = await Task.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  if (!taskUpdated) {
+    return res.status(404).json({ status: "Fail", message: "User not found" });
+  }
+
+  res.status(200).json({ status: "Success", data: taskUpdated });
+});
+
+// ❌ Delete task
+const deleteTask = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const document = await Task.findByIdAndDelete(id);
+
+  if (!document) {
+    return res
+      .status(404)
+      .json({ status: "Fail", message: "Document not found" });
+  }
+
+  res
+    .status(200)
+    .json({ status: "Success", message: "Document deleted successfully" });
+});
+
+module.exports = {
+   createTask,
+   getTask,
+   getTasks,
+   updateTask,
+   deleteTask
+};
