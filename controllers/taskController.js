@@ -3,6 +3,18 @@ const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const ApiFeatures = require("../utils/ApiFeatures");
 
+const editSum = (title) => {
+  const n = title.split("\n").map((e) => {
+    return e.replace("\r", "");
+  });
+
+  const res1 = n.reduce((acc, ele) => {
+    return +acc + +ele;
+  });
+
+  return res1;
+};
+
 // 📥 Get all tasks
 const getTasks = asyncHandler(async (req, res) => {
   const countDocuments = await Task.countDocuments();
@@ -35,6 +47,16 @@ const getTask = asyncHandler(async (req, res) => {
 
 // ➕ Create new task
 const createTask = asyncHandler(async (req, res) => {
+  // const n = req.body.title.split("\n").map((e) => {
+  //   return e.replace("\r", "");
+  // });
+
+  // const res1 = n.reduce((acc, ele) => {
+  //   return +acc + +ele;
+  // });
+
+  req.body.sum = editSum(req.body.title);
+
   const task = await Task.create(req.body);
   res.status(201).json({ status: "Success", data: task });
 });
@@ -42,6 +64,10 @@ const createTask = asyncHandler(async (req, res) => {
 // ✏️ Update task
 const updateTask = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
+  if (req.body.title) {
+    req.body.sum = editSum(req.body.title);
+  }
 
   const taskUpdated = await Task.findByIdAndUpdate(id, req.body, {
     new: true,
@@ -71,9 +97,9 @@ const deleteTask = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
-   createTask,
-   getTask,
-   getTasks,
-   updateTask,
-   deleteTask
+  createTask,
+  getTask,
+  getTasks,
+  updateTask,
+  deleteTask,
 };

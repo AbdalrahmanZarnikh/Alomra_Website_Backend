@@ -12,6 +12,9 @@ const taskSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+    },
+    sum:{
+      type:Number
     }
   },
   { timestamps: true }
