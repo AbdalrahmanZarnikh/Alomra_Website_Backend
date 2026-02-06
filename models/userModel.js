@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: [true, "user name required"],
     },
+    gender:{
+      type:String
+    },
     phone: {
       type: String,
       trim: true,
