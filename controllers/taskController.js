@@ -47,13 +47,6 @@ const getTask = asyncHandler(async (req, res) => {
 
 // ➕ Create new task
 const createTask = asyncHandler(async (req, res) => {
-  // const n = req.body.title.split("\n").map((e) => {
-  //   return e.replace("\r", "");
-  // });
-
-  // const res1 = n.reduce((acc, ele) => {
-  //   return +acc + +ele;
-  // });
 
   req.body.sum = editSum(req.body.title);
 
