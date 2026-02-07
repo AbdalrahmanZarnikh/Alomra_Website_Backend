@@ -47,8 +47,21 @@ const getTask = asyncHandler(async (req, res) => {
 
 // ➕ Create new task
 const createTask = asyncHandler(async (req, res) => {
+  if (req.body.title) {
+    // تقسيم النص إلى أسطر، ثم تصفية الأسعار الفارغة
+    const numbers = req.body.title
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "")
+      .map((line) => parseInt(line, 10));
 
-  req.body.sum = editSum(req.body.title);
+    // التحقق أن جميع القيم أرقام صحيحة صالحة
+    const allValidNumbers = numbers.every((num) => !isNaN(num));
+
+    if (allValidNumbers && numbers.length > 0) {
+      req.body.sum = editSum(req.body.title);
+    }
+  }
 
   const task = await Task.create(req.body);
   res.status(201).json({ status: "Success", data: task });
@@ -57,11 +70,22 @@ const createTask = asyncHandler(async (req, res) => {
 // ✏️ Update task
 const updateTask = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
   if (req.body.title) {
-    req.body.sum = editSum(req.body.title);
-  }
+    // تقسيم النص إلى أسطر، ثم تصفية الأسعار الفارغة
+    const numbers = req.body.title
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "")
+      .map((line) => parseInt(line, 10));
 
+    // التحقق أن جميع القيم أرقام صحيحة صالحة
+    const allValidNumbers = numbers.every((num) => !isNaN(num));
+
+    if (allValidNumbers && numbers.length > 0) {
+      console.log("hello");
+      req.body.sum = editSum(req.body.title);
+    }
+  }
   const taskUpdated = await Task.findByIdAndUpdate(id, req.body, {
     new: true,
   });
