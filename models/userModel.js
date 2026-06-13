@@ -10,6 +10,9 @@ const userSchema = new mongoose.Schema(
     gender:{
       type:String
     },
+    age:{
+      type:String
+    },
     phone: {
       type: String,
       trim: true,
